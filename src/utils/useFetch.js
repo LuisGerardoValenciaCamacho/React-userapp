@@ -1,29 +1,33 @@
-export const useFetch = async (url, method, data = null) => {
+import axios from "axios";
+
+export const get = async(url) => {
     try {
-        const options = {
-            method: method,
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: method === "GET" ? null : JSON.stringify(data),
-        };
-        const response = await fetch(url, options);
-        if (!response.ok) {
-            const result = await response.json();
-            return {
-                result: `${result.message} [${result.error}]`,
-                code: response.status
-            }
-        }
-        const result = await response.json();
-        return {
-            result: result,
-            code: response.status
-        }
-    } catch (error) {
-        return {
-            result: error,
-            code: 500
-        }
+        return axios.get(url);
+    } catch(e) {
+        return e
     }
+}
+
+export const post = async(url, data) => {
+    try {
+        return axios.post(url, data);
+    } catch(e) {
+        console.error(e);
+    }
+}
+
+export const put = async(url, data) => {
+    try {
+        return axios.put(url, data);
+    } catch(e) {
+        console.error(e);
+    }   
+}
+
+export const remove = async(url) => {
+    try {
+        return axios.delete(url);
+    } catch(e) {
+        console.error(e);
+    }   
 }
