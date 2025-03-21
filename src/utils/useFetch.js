@@ -1,33 +1,34 @@
 import axios from "axios";
+import { config } from "./useUtils";
 
-export const get = async(url) => {
+export const get = (url, auth = false) => {
     try {
-        return axios.get(url);
+        return axios.get(url, auth ? config() : {});
     } catch(e) {
-        return e
+        return e;
     }
 }
 
-export const post = async(url, data) => {
+export const post = (url, data, auth = false) => {
     try {
-        return axios.post(url, data);
+        return axios.post(url, data, auth ? config() : {});
     } catch(e) {
-        console.error(e);
+        return e;
     }
 }
 
-export const put = async(url, data) => {
+export const put = (url, data, auth = false) => {
     try {
-        return axios.put(url, data);
+        return axios.put(url, data, auth ? config() : {});
     } catch(e) {
-        console.error(e);
+        return e;
     }   
 }
 
-export const remove = async(url) => {
+export const remove = (url, auth = false) => {
     try {
-        return axios.delete(url);
+        return axios.delete(url, auth ? config() : {});
     } catch(e) {
-        console.error(e);
+        return e;
     }   
 }

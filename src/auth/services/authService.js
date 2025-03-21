@@ -1,4 +1,5 @@
+import { post } from "../../utils/useFetch"
 
 export const loginUser = (userLogin) => {
-    return (userLogin.username === 'Warmachine' && userLogin.password === 'Usuario!1');
+    return post("http://localhost:5500/login", JSON.stringify(userLogin));
 }

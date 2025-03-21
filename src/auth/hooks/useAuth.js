@@ -14,22 +14,31 @@ export const useAuth = () => {
     const navigate = useNavigate();
 
     const handlerLogin = ({ username, password }) => {
-        const isLogin = loginUser({ username, password });
-        
-        if (isLogin) {
-            const user = { username: 'admin' }
+        const respuesta = loginUser({ username, password });
+        respuesta.then(response => {
+            const claims = JSON.parse(window.atob(response.data.token.split(".")[1]));
+            const user = { username: claims.username }
             dispatch({
                 type: 'login',
-                payload: user,
+                payload: {
+                    user,
+                    isAdmin: claims.isAdmin
+                },
             });
             sessionStorage.setItem('login', JSON.stringify({
                 isAuth: true,
+                isAdmin: claims.isAdmin,
                 user,
             }));
+            sessionStorage.setItem("token", response.data.token)
             navigate('/users');
-        } else {
-            Swal.fire('Error Login', 'Username o password invalidos', 'error');
-        }
+        }).catch(err => {
+            if(err.status === 401) {
+                Swal.fire('Error Login', `Error al iniciar sesión: Contraseña o usuario incorrecto`, 'error');
+                return;
+            }
+            Swal.fire('Error Login', `Error al iniciar sesión: ${err}`, 'error');
+        })
     }
 
     const handlerLogout = () => {
@@ -37,6 +46,8 @@ export const useAuth = () => {
             type: 'logout',
         });
         sessionStorage.removeItem('login');
+        sessionStorage.removeItem("token");
+        sessionStorage.clear();
     }
     return {
         login,
