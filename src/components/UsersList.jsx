@@ -1,10 +1,9 @@
-import { useContext } from "react"
 import { UserRow } from "./UserRow"
-import { UserContext } from "../context/UserContext"
+import { useUsers } from "../hooks/useUsers"
 
 export const UsersList = () => {
 
-    const { users } = useContext(UserContext)
+    const { users } = useUsers()
 
     return (
         <table className="table table-hover table-striped">

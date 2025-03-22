@@ -12,7 +12,6 @@ export const UserRoutes = () => {
 
     return (
         <>
-        <UserProvider>
             <Navbar />
             <Routes>
                 <Route path="users" element={<UsersPage />} />
@@ -26,7 +25,6 @@ export const UserRoutes = () => {
                 }
                 <Route path="/" element={<Navigate to="/users" />} />
             </Routes>
-        </UserProvider>
         </>
     )
 }

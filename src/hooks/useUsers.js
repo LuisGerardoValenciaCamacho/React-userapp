@@ -1,29 +1,18 @@
-import { useContext, useReducer, useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import { usersReducer } from "../reducers/usersReducer";
 import { get, post, put, remove } from "../utils/useFetch";
 import { BASE_URL } from "../utils/useUtils";
 import { AuthContext } from "../auth/context/AuthContext";
-
-const initialUsers = [
-    
-];
-
-const initialUserForm = {
-    id: 0,
-    username: '',
-    password: '',
-    email: '',
-    admin: false
-}
+import { useDispatch, useSelector } from "react-redux";
+import { addUser, loadingUsers, onUserSelectedForm, removeUser, updateUser } from "../store/slices/users/usersSlice";
 
 export const useUsers = () => {
-    const [users, dispatch] = useReducer(usersReducer, initialUsers);
-    const [userSelected, setUserSelected] = useState(initialUserForm);
-    const [visibleForm, setVisibleForm] = useState(false);
-    const { handlerLogout } = useContext(AuthContext);
+    const { users, userSelected, visibleForm } = useSelector(state => state.users);
+    const dispatch = useDispatch();
+    
     const navigate = useNavigate();
+    const { handlerLogout } = useContext(AuthContext);
 
     const handlerAddUser = async (user) => {
         const result = user.id === 0 ? post(`${BASE_URL}/create`, user, true) : put(`${BASE_URL}/update/${user.id}`, user, true);
@@ -35,10 +24,11 @@ export const useUsers = () => {
                 Swal.fire("Error", response.response.data.message, "error");
                 return;
             }
-            dispatch({
-                type: user.id === 0 ? "addUser" : "updateUser",
-                payload: response.data
-            })
+            if(user.id == 0) {
+                dispatch(addUser(response.data))
+            } else {
+                dispatch(updateUser(response.data))
+            }
             Swal.fire(user.id === 0 ? "Usuario creado" : "Usuario actualizado", user.id === 0 ? "El usuario ha sido creado con exito!" : "El usuario ha sido actualizado con exito!", "success")
             handlerCloseForm();
             navigate("/users")
@@ -66,10 +56,7 @@ export const useUsers = () => {
                     if(response.status === 401 || response.status === 403) {
                         handlerLogout();
                     }
-                    dispatch({
-                        type: 'removeUser',
-                        payload: id,
-                    });
+                    dispatch(removeUser(id))
                     Swal.fire('Usuario Eliminado!', 'El usuario ha sido eliminado con exito!', 'success')
                 }).catch(error => {
                     if(error.status === 401 || error.status === 403) {
@@ -88,32 +75,27 @@ export const useUsers = () => {
             if(response.status === 401 || response.status === 403) {
                 handlerLogout();
             }
-            dispatch({
-                type: "loadingUsers",
-                payload: response.data
-            })
+            dispatch(loadingUsers(response.data));
         }).catch(error => {
             if(error.status === 401 || error.status === 403) {
                 handlerLogout();
             }
-            console.error(error.response.data.message);
             Swal.fire("Error", error.response.data.message, "error");
         })
     }
 
     const handlerUserSelectedForm = (user) => {
-        setVisibleForm(true);
-        setUserSelected({ ...user });
+        dispatch(onUserSelectedForm(user));
     }
 
     const handlerOpenForm = () => {
-        setVisibleForm(true);
+        dispatch(onOpenForm());
     }
 
     const handlerCloseForm = () => {
-        setVisibleForm(false);
-        setUserSelected(initialUserForm);
+        dispatch(onCloseForm());
     }
+    
     return {
         users,
         userSelected,
