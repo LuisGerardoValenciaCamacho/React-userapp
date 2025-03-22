@@ -1,33 +1,32 @@
-import axios from "axios";
-import { config } from "./useUtils";
+import userApi from "../apis/userApi";
 
-export const get = (url, auth = false) => {
+export const get = (url) => {
     try {
-        return axios.get(url, auth ? config() : {});
+        return userApi.get(url);
     } catch(e) {
         return e;
     }
 }
 
-export const post = (url, data, auth = false) => {
+export const post = (url, data) => {
     try {
-        return axios.post(url, data, auth ? config() : {});
+        return userApi.post(url, data);
     } catch(e) {
         return e;
     }
 }
 
-export const put = (url, data, auth = false) => {
+export const put = (url, data) => {
     try {
-        return axios.put(url, data, auth ? config() : {});
+        return userApi.put(url, data);
     } catch(e) {
         return e;
     }   
 }
 
-export const remove = (url, auth = false) => {
+export const remove = (url) => {
     try {
-        return axios.delete(url, auth ? config() : {});
+        return userApi.delete(url);
     } catch(e) {
         return e;
     }   

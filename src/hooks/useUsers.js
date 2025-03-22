@@ -15,6 +15,7 @@ const initialUserForm = {
     username: '',
     password: '',
     email: '',
+    admin: false
 }
 
 export const useUsers = () => {

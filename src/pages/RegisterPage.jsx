@@ -12,7 +12,6 @@ export const RegisterPage = () => {
     const { id } = useParams();
 
     useEffect(() => {
-        console.log(id);
         if (id) {
             const user = users.find(u => u.id == id) || initialUserForm;
             setUserSelected(user);
