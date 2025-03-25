@@ -1,18 +1,17 @@
-import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { get, post, put, remove } from "../utils/useFetch";
 import { BASE_URL } from "../utils/useUtils";
-import { AuthContext } from "../auth/context/AuthContext";
 import { useDispatch, useSelector } from "react-redux";
-import { addUser, loadingUsers, onUserSelectedForm, removeUser, updateUser } from "../store/slices/users/usersSlice";
+import { addUser, initialUserForm, loadingUsers, onCloseForm, onOpenForm, onUserSelectedForm, removeUser, updateUser } from "../store/slices/users/usersSlice";
+import { useAuth } from "../auth/hooks/useAuth";
 
 export const useUsers = () => {
     const { users, userSelected, visibleForm } = useSelector(state => state.users);
     const dispatch = useDispatch();
     
     const navigate = useNavigate();
-    const { handlerLogout } = useContext(AuthContext);
+    const { handlerLogout } = useAuth();
 
     const handlerAddUser = async (user) => {
         const result = user.id === 0 ? post(`${BASE_URL}/create`, user, true) : put(`${BASE_URL}/update/${user.id}`, user, true);

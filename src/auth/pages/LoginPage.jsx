@@ -1,6 +1,6 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import Swal from "sweetalert2";
-import { AuthContext } from "../context/AuthContext";
+import { useAuth } from "../hooks/useAuth";
 
 const initialLoginForm = {
     username: '',
@@ -8,7 +8,7 @@ const initialLoginForm = {
 }
 export const LoginPage = () => {
 
-    const { handlerLogin } = useContext(AuthContext);
+    const { handlerLogin } = useAuth();
     const [loginForm, setLoginForm] = useState(initialLoginForm);
     const { username, password } = loginForm;
 
@@ -25,10 +25,7 @@ export const LoginPage = () => {
         if (!username || !password) {
             Swal.fire('Error de validacion', 'Username y password requeridos', 'error');
         }
-
-        // aca implementamos el login
         handlerLogin({username, password});
-        
         setLoginForm(initialLoginForm);
     }
     return (
@@ -40,29 +37,11 @@ export const LoginPage = () => {
                     </div>
                     <form onSubmit={ onSubmit }>
                         <div className="modal-body">
-                            <input
-                                className="form-control my-3 w-75"
-                                placeholder="Username"
-                                name="username"
-                                value={username}
-                                onChange={ onInputChange }
-                            />
-                            
-                            <input
-                                className="form-control my-3 w-75"
-                                placeholder="Password"
-                                type="password"
-                                name="password"
-                                value={password}
-                                onChange={onInputChange}
-                            />
+                            <input className="form-control my-3 w-75" placeholder="Username" name="username" value={username} onChange={ onInputChange }/>
+                            <input className="form-control my-3 w-75" placeholder="Password" type="password" name="password" value={password} onChange={onInputChange}/>
                         </div>
                         <div className="modal-footer">
-                            <button
-                                className="btn btn-primary"
-                                type="submit">
-                                Login
-                            </button>
+                            <button className="btn btn-primary" type="submit">Login</button>
                         </div>
                     </form>
                 </div>

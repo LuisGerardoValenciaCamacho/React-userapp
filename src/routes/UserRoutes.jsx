@@ -2,13 +2,11 @@ import { Navigate, Route, Routes } from "react-router-dom"
 import { Navbar } from "../components/layout/Navbar"
 import { RegisterPage } from "../pages/RegisterPage"
 import { UsersPage } from "../pages/UsersPage"
-import { UserProvider } from "../context/UserProvider"
-import { useContext } from "react"
-import { AuthContext } from "../auth/context/AuthContext"
+import { useAuth } from "../auth/hooks/useAuth"
 
 export const UserRoutes = () => {
 
-    const { login } = useContext(AuthContext);
+    const { login } = useAuth();
 
     return (
         <>

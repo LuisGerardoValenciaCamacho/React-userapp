@@ -42,7 +42,7 @@ export const usersSlice = createSlice({
         },
         onUserSelectedForm: (state, action) => {
             state.visibleForm = true;
-            state.userSelected(action.payload);
+            state.userSelected = action.payload;
         },
         onOpenForm: (state, action) => {
             state.visibleForm = true;
